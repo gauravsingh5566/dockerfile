@@ -1,0 +1,11 @@
+FROM node:10.24.1-alpine
+WORKDIR /usr/src/server
+#COPY package.json ./
+COPY . .
+COPY .env ./
+#RUN npm install -g pm2
+RUN npm install
+#COPY . .
+CMD ["node", "server.js"]
+
+EXPOSE 4000
