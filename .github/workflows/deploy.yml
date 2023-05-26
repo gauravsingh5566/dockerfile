@@ -1,0 +1,25 @@
+
+name: automation_deployment
+
+on:
+  pull_request:
+    branches: [ "final_code" ]
+
+jobs:
+  access_server:
+    name: Access server
+    runs-on: ubuntu-latest
+    steps:
+      - name: Create a file
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.HOST_USERNAME }}
+          key: ${{ secrets.PRIVATE_KEY }}
+          script: |  
+              cd /home/ubuntu/watchout
+              sudo git pull https://devarya:${{ secrets.GIT_TOKEN }}@github.com/devarya/watchout.git
+              cd /home/ubuntu/watchout/client
+              sudo npm run build-staging
+              sudo pm2 restart 0  
+              sudo service nginx status
